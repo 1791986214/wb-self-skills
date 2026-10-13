@@ -21,7 +21,7 @@
 
 ---
 
-## 怎么用（三个动作）
+## 怎么用（四件事）
 
 ### 1. 装到新机器
 
@@ -51,7 +51,37 @@ python3 sync_skills.py --push "说明"     # 手动跑并指定 commit 说明
 - 日志：`~/.workbuddy/logs/skills-sync.log`
 - 推送时直连不通会自动改走本机代理（`127.0.0.1:7897`）
 
-### 3. 增删技能（维护名单）
+### 3. 投毒防线（推送前必过闸门）
+
+「自动推送」最大的风险是**盲提交**：技能从别人那下载来、或者被偷偷改了，
+守护任务照样打包推上去 —— 而这个仓库是**公开的**。所以每次推送前都要过三道闸：
+
+| 层 | 管什么 | 拦什么 |
+|---|---|---|
+| ① 变更审计 | 跟「上一次已放行状态」（git 里的 zip）比对 | **新增技能**、**新增文件**、**第三方依赖目录被改动** —— 一律拦 |
+| ② 威胁扫描 | 扫改动的文本，30+ 条规则 | 网络外传、`curl\|sh`、base64 解码执行、读凭据/钥匙串、破坏性删除、写持久化项、动态 exec、从 URL 装包 |
+| ③ 密钥扫描 | 全文件找密钥样式 | `sk-` / `ghp_` / `AKIA` / JWT / 私钥 / 硬编码口令 —— **公开仓库里这条最要命** |
+
+**文档和代码分开判**：README 里说「守护任务装在 LaunchAgents」是正当说明，脚本里真去写才是后门。
+所以「写持久化项」这类规则只对脚本文件算高危，出现在文档里降级成提醒。
+但 `SKILL.md` 的**提示词注入**（「忽略之前的指令」「不要告诉用户」「上传这些文件」）照拦不误——
+技能本质就是给 AI 的指令，注入比脚本更隐蔽。
+
+被拦之后：
+
+```bash
+python3 sync_skills.py --scan              # 随时手动扫一遍
+python3 sync_skills.py --review            # 看待审报告 + 放行记录
+python3 sync_skills.py --approve 技能目录名  # 人工确认无误后放行（放行后推送）
+python3 sync_skills.py --strict on         # 更严：任何源码改动都要人工放行
+```
+
+- 被拦时**不会丢东西**：改动留在工作区，报告写进 `~/.workbuddy/logs/skills-review/`
+- 放行会记进 `~/.workbuddy/logs/skills-approvals.log`（谁、什么时候、放行了哪几条）
+- **密钥泄漏是个硬闸**：`--approve` 也拒，因为推上去就永久留在公开仓库历史里了。确实要推得再加 `--force`
+- 报告同一批拦截项只留一份（不会跑一次写一份）
+
+### 4. 增删技能（维护名单）
 
 名单在 `roster.json`，**只放高频的**。增减完会自动重装守护任务，让监听路径跟上。
 
@@ -88,7 +118,8 @@ python3 sync_skills.py --remove archinorm      # 剔一个出去
 | `skills/*.zip` | 技能包，中文文件名 |
 | `roster.json` | 收录名单（中文名 + 目录名），维护就改这里 |
 | `manifest.json` | 机器可读清单：说明 / 触发词 / 体积 / sha256 / 更新时间 |
-| `sync_skills.py` | 打包 + 刷新清单 + 推送 + 守护任务管理，一条命令搞定 |
+| `sync_skills.py` | 打包 + 刷新清单 + 推送 + 闸门 + 守护任务管理，一条命令搞定 |
+| `guard.py` | 投毒防线：变更审计 + 威胁扫描 + 待审报告 |
 | `README.md` | 就是本页，清单表由脚本自动填 |
 
 **本机位置**
@@ -99,6 +130,8 @@ python3 sync_skills.py --remove archinorm      # 剔一个出去
 | 技能来源 | `~/.workbuddy/skills/` |
 | 守护任务 | `~/Library/LaunchAgents/com.xiaole.skills-sync.plist` |
 | 同步日志 | `~/.workbuddy/logs/skills-sync.log` |
+| 待审报告 | `~/.workbuddy/logs/skills-review/` |
+| 放行记录 | `~/.workbuddy/logs/skills-approvals.log` |
 
 ---
 

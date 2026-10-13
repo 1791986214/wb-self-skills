@@ -510,6 +510,18 @@ def has_pending_changes():
     return bool(git("status", "--porcelain").stdout.strip())
 
 
+def change_summary(limit=12):
+    """工作区里都动了哪些文件（含仓库自身脚本/文档，便于事后审计提交）。"""
+    out = []
+    for line in git("status", "--porcelain").stdout.splitlines():
+        line = line.rstrip()
+        if not line.strip():
+            continue
+        flag, path = line[:2].strip() or "M", line[3:].strip()
+        out.append("%s %s" % ({"M": "改", "A": "增", "D": "删", "??": "新"}.get(flag, flag), path))
+    return out[:limit] + (["…共 %d 个" % len(out)] if len(out) > limit else [])
+
+
 def push():
     """直连失败自动退到本机代理。返回 (成功, 说明)。"""
     p = git("push", "origin", "HEAD")
@@ -564,7 +576,30 @@ def build_plist():
     }
 
 
+def agent_belongs_here():
+    """已装的那份守护任务，是不是「本仓库这一份」？
+
+    launchd 按标签识别任务，不认路径 —— 所以仓库副本（比如在 /tmp 里做的沙盘）
+    如果不加判断就安装，会把真任务顶掉。下面这层校验就是防这个的。
+    """
+    if not os.path.exists(AGENT_PLIST):
+        return False
+    try:
+        with open(AGENT_PLIST, "rb") as fh:
+            cfg = plistlib.load(fh)
+    except Exception:
+        return False
+    mine = os.path.realpath(os.path.join(REPO_DIR, "sync_skills.py"))
+    args = cfg.get("ProgramArguments") or []
+    return any(os.path.realpath(a) == mine for a in args)
+
+
 def install_agent():
+    if os.path.exists(AGENT_PLIST) and not agent_belongs_here():
+        print("[!] 已有一个同名守护任务，但它指向别的目录（八成是仓库副本）：")
+        print("     %s" % AGENT_PLIST)
+        print("     为免顶掉真正在用的那个，本次不覆盖。请在真仓库里执行本命令。")
+        return 1
     os.makedirs(LOG_DIR, exist_ok=True)
     os.makedirs(os.path.dirname(AGENT_PLIST), exist_ok=True)
     with open(AGENT_PLIST, "wb") as fh:
@@ -588,6 +623,9 @@ def install_agent():
 
 
 def uninstall_agent():
+    if os.path.exists(AGENT_PLIST) and not agent_belongs_here():
+        print("[!] 这个守护任务不属于本仓库目录，拒绝卸载（防误伤真任务）。")
+        return 1
     uid = os.getuid()
     subprocess.run(["launchctl", "bootout", "gui/%d/%s" % (uid, AGENT_LABEL)], capture_output=True)
     subprocess.run(["launchctl", "unload", "-w", AGENT_PLIST], capture_output=True)
@@ -598,6 +636,8 @@ def uninstall_agent():
 
 
 def agent_loaded():
+    if not agent_belongs_here():
+        return False
     r = subprocess.run(["launchctl", "print", "gui/%d/%s" % (os.getuid(), AGENT_LABEL)],
                        text=True, capture_output=True)
     return r.returncode == 0
@@ -716,6 +756,9 @@ def auto_run():
         names = [r["cn"] for r in res["results"] if r["ok"]]
         head = "、".join(names) if len(names) <= 3 else "%d 个技能" % len(names)
         notes = gate_commit_note(gate)
+        touched = change_summary()
+        if touched:
+            notes.append("变更文件：" + "、".join(touched))
         msg = "自动同步：%s（%s）" % (head, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
         if notes:
             msg += "\n\n" + "\n".join("- " + n for n in notes)
@@ -785,6 +828,16 @@ def cmd_approve(dirs, force=False):
     res = do_pack(roster, quiet=True)
     gate = run_gate(res["results"], approved=dirs, tag="approve", emit_report=True)
     print_gate(gate)
+    # 密钥泄漏推上去不可逆（仓库是公开的），放行要再加一道确认
+    if not force:
+        leaks = [b for b in gate.get("approved", []) if "密钥泄漏" in b[2]]
+        if leaks:
+            print("[拒] 拦到 %d 处疑似密钥泄漏，放行会把密钥永久留在公开仓库历史里。" % len(leaks))
+            for b in leaks:
+                print("       · %s —— %s" % (b[2], b[4]))
+            print("     建议先把密钥删掉/换成占位符，再重新同步。")
+            print("     确实要硬推（不可逆）：--approve %s --force" % ",".join(dirs))
+            return 1
     if gate["blockers"]:
         print("[拦] 仍有未放行的拦截项：%s" % "、".join(sorted({b[0] for b in gate["blockers"]})))
         print("     报告：%s" % gate["report"])
@@ -876,6 +929,9 @@ def main():
                 for w in gate0["warnings"]:
                     print("[警] %s —— %s" % (w[2], w[4]))
             print("[OK] 已收录并通过扫描：%s（%s）" % (auto_cn_name(d), d))
+            # 首次收录立刻建立基线（否则下次任何改动都会被判成「没审过的版本」）
+            ok0, how0 = commit_and_push("收录新技能：%s（首次收录，已过投毒扫描）" % d)
+            print("     基线：%s" % how0)
             if agent_loaded():
                 install_agent()
 
