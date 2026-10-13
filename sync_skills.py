@@ -424,7 +424,7 @@ def set_strict(v):
         fh.write("\n")
 
 
-def run_gate(results, approved=(), strict=None, tag="auto", emit_report=True):
+def run_gate(results, approved=(), strict=None, tag="auto", emit_report=True, write_report=True):
     """跑投毒闸门。
 
     基准 = git HEAD 里那份 zip，也就是「上一次已放行的状态」。
@@ -437,7 +437,8 @@ def run_gate(results, approved=(), strict=None, tag="auto", emit_report=True):
     res = guard.precheck(roster, REPO_DIR, SKILLS_SRC, zip_map,
                          EXCLUDE_DIRS, EXCLUDE_FILES,
                          report_dir=REVIEW_DIR, tag=tag, strict=strict,
-                         force_report=(emit_report and bool(approved)))
+                         force_report=(emit_report and bool(approved)),
+                         write_report=write_report)
     approved = set(approved)
     kept, demoted = [], []
     for b in res["blockers"]:
@@ -691,18 +692,22 @@ def auto_run():
 
     if dirty:
         # ---- 投毒闸门：先审计 + 扫描，过了才允许提交 ----
-        gate = run_gate(res["results"])
+        gate = run_gate(res["results"], write_report=False)
         if gate["blockers"]:
-            sig = ";".join("%s|%s" % (b[0], b[2]) for b in gate["blockers"])
+            sig = guard.blocker_signature(gate["blockers"])
             if sig != state.get("blocked_sig"):
-                log("[拦] 投毒闸门拦下 %d 项，未推送。待审报告：%s" % (len(gate["blockers"]), gate["report"]), quiet=True)
+                report = guard.write_report_file(gate["results"], gate["blockers"],
+                                                 gate["warnings"], REVIEW_DIR, "auto")
+                log("[拦] 投毒闸门拦下 %d 项，未推送。待审报告：%s" % (len(gate["blockers"]), report), quiet=True)
                 for b in gate["blockers"][:5]:
-                    log("      · %s：%s" % (b[0], b[2]), quiet=True)
+                    log("      · %s：%s —— %s" % (b[0], b[2], b[4]), quiet=True)
                 state["blocked_sig"] = sig
+                state["blocked_report"] = report
                 save_state(state)
             return 1
         if state.get("blocked_sig"):
             state["blocked_sig"] = None
+            state.pop("blocked_report", None)
             save_state(state)
         if gate.get("warnings"):
             for w in gate["warnings"][:5]:

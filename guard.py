@@ -355,7 +355,7 @@ def evaluate_skill(repo_dir, skills_src, skill, zip_name, exclude_dirs, exclude_
 
 
 def precheck(roster, repo_dir, skills_src, zip_names, exclude_dirs, exclude_files,
-             report_dir=None, tag=None, strict=False, force_report=False):
+             report_dir=None, tag=None, strict=False, force_report=False, write_report=True):
     """对全部技能跑一遍闸门。返回 blockers / warnings / report 路径。"""
     results = []
     for skill in roster:
@@ -366,12 +366,19 @@ def precheck(roster, repo_dir, skills_src, zip_names, exclude_dirs, exclude_file
     blockers = [(r["dir"],) + b for r in results for b in r["blockers"]]
     warnings = [(r["dir"],) + w for r in results for w in r["warnings"]]
     report = None
-    if blockers or force_report:
-        report = write_report(results, blockers, warnings, report_dir, tag)
+    if write_report and (blockers or force_report):
+        report = write_report_file(results, blockers, warnings, report_dir, tag)
     return {"results": results, "blockers": blockers, "warnings": warnings, "report": report}
 
 
-def write_report(results, blockers, warnings, report_dir, tag=None):
+def blocker_signature(blockers):
+    """同一批拦截项只写一份报告：用「谁+什么问题+证据」算签名。"""
+    import hashlib as _h
+    raw = "|".join("%s#%s#%s" % (b[0], b[2], b[4]) for b in blockers)
+    return _h.sha256(raw.encode("utf-8")).hexdigest()[:16]
+
+
+def write_report_file(results, blockers, warnings, report_dir, tag=None):
     import datetime
     report_dir = report_dir or os.path.join(os.path.expanduser("~"), ".workbuddy", "logs", "skills-review")
     os.makedirs(report_dir, exist_ok=True)
@@ -428,6 +435,13 @@ def write_report(results, blockers, warnings, report_dir, tag=None):
     L.append("> 如果不想让自动同步接手任何内容改动，用 `--strict` 模式：一律只推「重打包」不推源码改动。")
     with open(path, "w", encoding="utf-8") as fh:
         fh.write("\n".join(L) + "\n")
+    # 只保留最近 20 份，别堆成垃圾场
+    try:
+        old = sorted(f for f in os.listdir(report_dir) if f.endswith(".md"))
+        for f in old[:-20]:
+            os.remove(os.path.join(report_dir, f))
+    except Exception:
+        pass
     return path
 
 
