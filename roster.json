@@ -13,10 +13,6 @@
       "dir": "offline-html-workbench-patch-release"
     },
     {
-      "cn": "逐帧二创增量冻结交付",
-      "dir": "pv-incremental-frozen-delivery"
-    },
-    {
       "cn": "项目架构归一化框架图",
       "dir": "archinorm"
     },
