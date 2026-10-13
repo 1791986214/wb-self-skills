@@ -43,6 +43,10 @@ TEXT_EXT = {
     ".env", ".example", ".gitignore", ".properties", ".gradle", ".make", ".mk",
 }
 VENDOR_MARKERS = ("node_modules/", "vendor/", "site-packages/", ".venv/", "dist-lib/")
+DOC_EXT = {".md", ".markdown", ".txt"}          # 文档类
+CODE_EXT = {".sh", ".bash", ".zsh", ".fish", ".py", ".js", ".mjs", ".cjs", ".ts",
+            ".tsx", ".jsx", ".bat", ".cmd", ".ps1", ".rb", ".pl", ".php", ".go",
+            ".rs", ".java", ".sql", ".yaml", ".yml", ".json"}   # 脚本/代码类
 MAX_SCAN_BYTES = 2 * 1024 * 1024   # 单文件超过 2MB 不扫内容，只记警告
 
 # ---------- 威胁规则 ----------
@@ -90,8 +94,6 @@ RULES = [
 #   doc  = 只在文档里作数（提示词注入只对「给 AI 的指令」有意义）
 RULE_SCOPE = {
     "写入持久化项": "code",
-    "动态执行代码": "code",
-    "远程装依赖": "code",
     "写文件到系统目录": "code",
     "写环境变量文件": "code",
     "提示词注入": "doc",
