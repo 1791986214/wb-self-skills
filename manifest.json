@@ -3,7 +3,7 @@
   "repo": "https://github.com/1791986214/wb-self-skills",
   "purpose": "自用 WorkBuddy 自制技能归档：中文名备注 + zip 打包，改动后自动同步",
   "source_dir": "/Users/lang/.workbuddy/skills",
-  "updated": "2026-10-13 18:17:36",
+  "updated": "2026-10-13 18:19:07",
   "count": 3,
   "total_size_human": "503 KB",
   "skills": [
@@ -15,7 +15,7 @@
       "triggers": "",
       "zip": "01-离线HTML工作台改版发版(offline-html-workbench-patch-release).zip",
       "size_human": "6 KB",
-      "sha256": "a7c6fd58eada8322fa60cf4e5d973444357a143cbc3423bee9cbea0667a086b7",
+      "sha256": "84e0c4bd5395a1b54ddd695218629a887d6cfbd360018785e8752c2d11a1b952",
       "files": 1,
       "src_updated": "2026-10-09",
       "install": "解压后把 offline-html-workbench-patch-release/ 整个放进 ~/.workbuddy/skills/"
@@ -28,7 +28,7 @@
       "triggers": "",
       "zip": "02-项目架构归一化框架图(archinorm).zip",
       "size_human": "486 KB",
-      "sha256": "3fbcb866a1c7a2f013db1bce826ed853f854b9a7fbf53a6b01f8faee5593ca0b",
+      "sha256": "8a60035e57fa70cf6bdc7e6d22282a2204d06d66e0a1ba3426b671476732ea47",
       "files": 278,
       "src_updated": "2026-10-13",
       "install": "解压后把 archinorm/ 整个放进 ~/.workbuddy/skills/"
@@ -41,7 +41,7 @@
       "triggers": "",
       "zip": "03-项目地图(project-map-skill).zip",
       "size_human": "12 KB",
-      "sha256": "a6654a3e407be36d25a7b18e940fa85340b9349b8d3d44c80720171f1c1b9cf9",
+      "sha256": "f023862596474810cf661192ce2502500bb6e219ec5ad7a7d5eee528ad5567e3",
       "files": 2,
       "src_updated": "2026-10-13",
       "install": "解压后把 project-map-skill/ 整个放进 ~/.workbuddy/skills/"

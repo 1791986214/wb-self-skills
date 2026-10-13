@@ -226,7 +226,12 @@ def pack_one(entry, index):
 
 
 def _build_zip_bytes(src):
-    """内存里打包，便于先算 sha 再决定要不要落盘。"""
+    """内存里打包，便于先算 sha 再决定要不要落盘。
+
+    注意：zip 条目统一用固定时间戳（1980-01-01），让产物**只由内容决定**。
+    否则源文件 mtime 一动，就算内容没变，zip 字节也会变 —— 那会天天产生垃圾提交。
+    人类想看的「技能更新时间」记在 manifest 的 src_updated 里。
+    """
     bio = io.BytesIO()
     with zipfile.ZipFile(bio, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
         for root, dirs, filenames in os.walk(src):
@@ -237,7 +242,7 @@ def _build_zip_bytes(src):
                 full = os.path.join(root, f)
                 rel = os.path.relpath(full, SKILLS_SRC)
                 st = os.stat(full)
-                info = zipfile.ZipInfo(rel, date_time=datetime.datetime.fromtimestamp(st.st_mtime).timetuple()[:6])
+                info = zipfile.ZipInfo(rel, date_time=(1980, 1, 1, 0, 0, 0))
                 info.external_attr = (stat.S_IFREG | (st.st_mode & 0o777)) << 16
                 info.compress_type = zipfile.ZIP_DEFLATED
                 with open(full, "rb") as fh:
@@ -251,9 +256,16 @@ def human(kb):
 
 # ===================== 清单输出 =====================
 
-def build_manifest(results, roster, updated=None):
+def build_manifest(results, roster, updated=None, prev=None):
+    prev = prev or {}
     items = []
     for entry, res in zip(roster, results):
+        old = prev.get(res["dir"], {})
+        # 内容（zip 哈希）没变就沿用上次的更新时间，避免 mtime 抖动造成假更新
+        if old.get("sha256") and old["sha256"] == res.get("sha256") and old.get("src_updated"):
+            src_updated = old["src_updated"]
+        else:
+            src_updated = res.get("src_updated")
         item = {
             "no": res.get("no"),
             "cn_name": res.get("cn"),
@@ -264,7 +276,7 @@ def build_manifest(results, roster, updated=None):
             "size_human": human(res["kb"]) if res["ok"] else None,
             "sha256": res.get("sha256"),
             "files": res.get("files"),
-            "src_updated": res.get("src_updated"),
+            "src_updated": src_updated,
             "install": "解压后把 %s/ 整个放进 ~/.workbuddy/skills/" % res["dir"],
         }
         if not res["ok"]:
@@ -339,16 +351,19 @@ def do_pack(roster, quiet=False):
 
     new_skills = scan_new_skills(roster)
 
-    old_updated = None
+    prev_manifest = {}
     if os.path.exists(MANIFEST):
         try:
-            old_updated = json.load(open(MANIFEST, encoding="utf-8")).get("updated")
+            raw = json.load(open(MANIFEST, encoding="utf-8"))
+            prev_manifest = {it["dir_name"]: it for it in raw.get("skills", [])}
         except Exception:
-            pass
-    manifest = build_manifest(results, roster, updated=old_updated)
+            prev_manifest = {}
+    old_updated = (json.load(open(MANIFEST, encoding="utf-8")).get("updated")
+                   if os.path.exists(MANIFEST) else None)
+    manifest = build_manifest(results, roster, updated=old_updated, prev=prev_manifest)
     changed = write_if_changed(MANIFEST, json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
     if changed:
-        manifest = build_manifest(results, roster)   # 真变了才换新时间戳
+        manifest = build_manifest(results, roster, prev=prev_manifest)   # 真变了才换新时间戳
         with open(MANIFEST, "w", encoding="utf-8") as fh:
             json.dump(manifest, fh, ensure_ascii=False, indent=2)
             fh.write("\n")
