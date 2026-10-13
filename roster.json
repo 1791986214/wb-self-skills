@@ -1,0 +1,28 @@
+{
+  "_说明": "小乐技能库收录名单。只放「高频在用」的技能；加一个减一个就增删一条。cn 留空会自动从技能自己 SKILL.md 里取名字。",
+  "_指令": [
+    "加技能：python3 sync_skills.py --add <技能目录名>",
+    "减技能：python3 sync_skills.py --remove <技能目录名>",
+    "看排行：python3 sync_skills.py --usage",
+    "打包上传：python3 sync_skills.py --push \"说明\"",
+    "会话里直接跟小乐说「同步技能到 git」也行"
+  ],
+  "skills": [
+    {
+      "cn": "离线HTML工作台改版发版",
+      "dir": "offline-html-workbench-patch-release"
+    },
+    {
+      "cn": "逐帧二创增量冻结交付",
+      "dir": "pv-incremental-frozen-delivery"
+    },
+    {
+      "cn": "项目架构归一化框架图",
+      "dir": "archinorm"
+    },
+    {
+      "cn": "项目地图",
+      "dir": "project-map-skill"
+    }
+  ]
+}
