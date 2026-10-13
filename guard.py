@@ -84,6 +84,20 @@ RULES = [
      "下载二进制到本地"),
 ]
 
+# 每条规则该在哪种文件里才作数（不写就是 all）
+#   code = 只在脚本/代码里算真危险；出现在文档里降级成警告
+#          （README 里说「守护任务装在 LaunchAgents」是正当说明，脚本里去写才是后门）
+#   doc  = 只在文档里作数（提示词注入只对「给 AI 的指令」有意义）
+RULE_SCOPE = {
+    "写入持久化项": "code",
+    "动态执行代码": "code",
+    "远程装依赖": "code",
+    "写文件到系统目录": "code",
+    "写环境变量文件": "code",
+    "提示词注入": "doc",
+    "指示外传文件": "doc",
+}
+
 # 密钥样式：仓库是公开的，命中必须拦
 SECRET_PATTERNS = [
     (r"sk-[A-Za-z0-9]{20,}", "OpenAI 风格密钥"),
@@ -174,11 +188,31 @@ def diff_fingerprints(prev, cur):
     return {"new_skill": False, "added": added, "removed": removed, "changed": changed}
 
 
-def scan_text(rel, text):
-    """对一段文本跑全部规则，返回 [(级别, 名称, 说明, 命中片段)]。"""
+def file_kind(rel):
+    ext = os.path.splitext(rel)[1].lower()
+    if ext in DOC_EXT:
+        return "doc"
+    if ext in CODE_EXT:
+        return "code"
+    return "other"
+
+
+def scan_text(rel, text, kind=None):
+    """对一段文本跑全部规则，返回 [(级别, 名称, 说明, 命中片段)]。
+
+    kind: doc / code / other。规则按 RULE_SCOPE 决定是否作数、要不要降级。
+    """
+    if kind is None:
+        kind = file_kind(rel)
     findings = []
     lines = text.splitlines()
     for lvl, name, rx, why in _COMPILED:
+        scope = RULE_SCOPE.get(name, "all")
+        if scope == "doc" and kind != "doc":
+            continue                      # 只查文档的规则，代码文件不适用
+        level = lvl
+        if scope == "code" and kind == "doc":
+            level = "MED"                 # 文档里提到 ≠ 真去干，降级成提醒
         for i, line in enumerate(lines, 1):
             if len(line) > 4000:
                 line = line[:4000]
@@ -188,7 +222,7 @@ def scan_text(rel, text):
                 if len(snippet) > 160:
                     pos = max(0, m.start() - 40)
                     snippet = ("…" if pos else "") + snippet[pos:pos + 160] + "…"
-                findings.append((lvl, name, why, "第 %d 行：%s" % (i, snippet)))
+                findings.append((level, name, why, "第 %d 行：%s" % (i, snippet)))
                 break
     for rx, name in _COMPILED_SECRETS:
         m = rx.search(text)
