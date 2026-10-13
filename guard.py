@@ -254,7 +254,7 @@ def head_zip_contents(repo_dir, zip_name):
 
 # ===================== 主闸门 =====================
 
-def evaluate_skill(repo_dir, skills_src, skill, zip_name, exclude_dirs, exclude_files):
+def evaluate_skill(repo_dir, skills_src, skill, zip_name, exclude_dirs, exclude_files, strict=False):
     """审计 + 扫描单个技能。返回 dict。"""
     d = skill["dir"]
     cur = source_files(skills_src, d, exclude_dirs, exclude_files)
@@ -277,6 +277,10 @@ def evaluate_skill(repo_dir, skills_src, skill, zip_name, exclude_dirs, exclude_
                              "vendor/node_modules 不该自己变", "、".join(vendor_touched[:4]) + "…"))
         if diff["removed"]:
             notes.append("删除 %d 个文件：%s" % (len(diff["removed"]), "、".join(diff["removed"][:6])))
+        if strict and diff["changed"]:
+            blockers.append(("HIGH", "严格模式：源码内容被修改（%d 个文件）" % len(diff["changed"]),
+                             "strict 模式下任何源码改动都要人工放行",
+                             "、".join(diff["changed"][:6])))
 
     # 内容扫描：只扫「新增 + 改动」的文件（便宜的路径）
     to_scan = diff["added"] + [f for f in diff["changed"] if not _is_vendor(f)]
@@ -315,18 +319,18 @@ def evaluate_skill(repo_dir, skills_src, skill, zip_name, exclude_dirs, exclude_
 
 
 def precheck(roster, repo_dir, skills_src, zip_names, exclude_dirs, exclude_files,
-             report_dir=None, tag=None):
+             report_dir=None, tag=None, strict=False, force_report=False):
     """对全部技能跑一遍闸门。返回 blockers / warnings / report 路径。"""
     results = []
     for skill in roster:
         results.append(evaluate_skill(repo_dir, skills_src, skill,
                                       zip_names.get(skill["dir"]),
-                                      exclude_dirs, exclude_files))
+                                      exclude_dirs, exclude_files, strict=strict))
 
     blockers = [(r["dir"],) + b for r in results for b in r["blockers"]]
     warnings = [(r["dir"],) + w for r in results for w in r["warnings"]]
     report = None
-    if blockers:
+    if blockers or force_report:
         report = write_report(results, blockers, warnings, report_dir, tag)
     return {"results": results, "blockers": blockers, "warnings": warnings, "report": report}
 

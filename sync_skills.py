@@ -39,6 +39,8 @@ import subprocess
 import sys
 import zipfile
 
+import guard   # 投毒防线：变更审计 + 威胁扫描 + 待审报告（同目录）
+
 # ---------- 路径 ----------
 HOME = os.path.expanduser("~")
 SKILLS_SRC = os.path.join(HOME, ".workbuddy", "skills")      # 本机技能目录
@@ -51,6 +53,8 @@ README = os.path.join(REPO_DIR, "README.md")
 LOG_DIR = os.path.join(HOME, ".workbuddy", "logs")
 LOG_FILE = os.path.join(LOG_DIR, "skills-sync.log")
 STATE_FILE = os.path.join(LOG_DIR, "skills-sync-state.json")
+REVIEW_DIR = os.path.join(LOG_DIR, "skills-review")     # 投毒待审报告目录
+APPROVAL_LOG = os.path.join(LOG_DIR, "skills-approvals.log")   # 放行记录（审计用）
 
 AGENT_LABEL = "com.xiaole.skills-sync"
 AGENT_PLIST = os.path.join(HOME, "Library", "LaunchAgents", AGENT_LABEL + ".plist")
@@ -121,17 +125,23 @@ def load_roster():
 
 
 def save_roster(skills):
-    data = {
+    data = {}
+    if os.path.exists(ROSTER):          # 保留 _strict 等已有键
+        try:
+            data = json.load(open(ROSTER, encoding="utf-8"))
+        except Exception:
+            data = {}
+    data.update({
         "_说明": "小乐技能库收录名单。只放「高频在用」的技能；加一个减一个就增删一条。cn 留空会自动从技能自己 SKILL.md 里取名字。",
         "_指令": [
-            "加技能：python3 sync_skills.py --add <技能目录名>",
+            "加技能：python3 sync_skills.py --add <技能目录名>（会自动过投毒扫描，有高危命中会拒绝）",
             "减技能：python3 sync_skills.py --remove <技能目录名>",
             "看排行：python3 sync_skills.py --usage",
+            "看闸门状态：python3 sync_skills.py --status",
             "打包上传：python3 sync_skills.py --push \"说明\"",
-            "会话里直接跟小乐说「同步技能到 git」也行",
         ],
-        "skills": skills,
-    }
+    })
+    data["skills"] = skills
     with open(ROSTER, "w", encoding="utf-8") as fh:
         json.dump(data, fh, ensure_ascii=False, indent=2)
         fh.write("\n")
@@ -392,6 +402,88 @@ def scan_new_skills(roster):
     return sorted(d for d in local if d not in known)
 
 
+# ===================== 投毒闸门 =====================
+
+def load_strict():
+    try:
+        return bool(json.load(open(ROSTER, encoding="utf-8")).get("_strict"))
+    except Exception:
+        return False
+
+
+def set_strict(v):
+    data = {}
+    if os.path.exists(ROSTER):
+        try:
+            data = json.load(open(ROSTER, encoding="utf-8"))
+        except Exception:
+            data = {}
+    data["_strict"] = bool(v)
+    with open(ROSTER, "w", encoding="utf-8") as fh:
+        json.dump(data, fh, ensure_ascii=False, indent=2)
+        fh.write("\n")
+
+
+def run_gate(results, approved=(), strict=None, tag="auto", emit_report=True):
+    """跑投毒闸门。
+
+    基准 = git HEAD 里那份 zip，也就是「上一次已放行的状态」。
+    approved 里的技能：拦截项降级放行（人工已确认），但仍写报告留痕。
+    """
+    roster = load_roster()
+    zip_map = {r["dir"]: r.get("zip") for r in results if r.get("ok")}
+    if strict is None:
+        strict = load_strict()
+    res = guard.precheck(roster, REPO_DIR, SKILLS_SRC, zip_map,
+                         EXCLUDE_DIRS, EXCLUDE_FILES,
+                         report_dir=REVIEW_DIR, tag=tag, strict=strict,
+                         force_report=(emit_report and bool(approved)))
+    approved = set(approved)
+    kept, demoted = [], []
+    for b in res["blockers"]:
+        (demoted if b[0] in approved else kept).append(b)
+    res["blockers"] = kept
+    res["approved"] = demoted
+    if demoted:
+        lines = ["[%s] 人工放行"% datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")]
+        for skill_dir, lvl, name, why, ev in demoted:
+            lines.append("   %s | %s | %s | %s" % (skill_dir, lvl, name, ev))
+        lines.append("   报告：%s" % res.get("report"))
+        try:
+            os.makedirs(LOG_DIR, exist_ok=True)
+            with open(APPROVAL_LOG, "a", encoding="utf-8") as fh:
+                fh.write("\n".join(lines) + "\n")
+        except Exception:
+            pass
+    return res
+
+
+def print_gate(res):
+    for skill_dir, lvl, name, why, ev in res["blockers"]:
+        print("[拦] %s：%s —— %s" % (skill_dir, name, why))
+        print("      证据：%s" % ev)
+    for skill_dir, lvl, name, why, ev in res.get("warnings", []):
+        print("[警] %s：%s（%s）" % (skill_dir, name, why))
+    for skill_dir, lvl, name, why, ev in res.get("approved", []):
+        print("[放] %s：%s（人工已放行）" % (skill_dir, name))
+
+
+def gate_commit_note(res):
+    """把变更摘要塞进 commit message，历史可审计。"""
+    parts = []
+    for r in res["results"]:
+        if r["no_change"]:
+            continue
+        if r["deltas"]:
+            parts.append("%s：%s" % (r["cn"], "；".join(r["deltas"][:5])))
+        elif r["diff"]["added"] or r["diff"]["removed"]:
+            parts.append("%s：新增 %d / 删除 %d 个文件" % (
+                r["cn"], len(r["diff"]["added"]), len(r["diff"]["removed"])))
+        if r["warnings"]:
+            parts.append("%s：%d 项警告" % (r["cn"], len(r["warnings"])))
+    return parts
+
+
 # ===================== git =====================
 
 def ensure_git_ready():
@@ -593,19 +685,116 @@ def auto_run():
         state["new_skills"] = new
         save_state(state)
 
-    if not (has_pending_changes() or unpushed_count()):
+    dirty = has_pending_changes()
+    if not (dirty or unpushed_count()):
         return 0   # 无变化，静默结束
 
-    if has_pending_changes():
+    if dirty:
+        # ---- 投毒闸门：先审计 + 扫描，过了才允许提交 ----
+        gate = run_gate(res["results"])
+        if gate["blockers"]:
+            sig = ";".join("%s|%s" % (b[0], b[2]) for b in gate["blockers"])
+            if sig != state.get("blocked_sig"):
+                log("[拦] 投毒闸门拦下 %d 项，未推送。待审报告：%s" % (len(gate["blockers"]), gate["report"]), quiet=True)
+                for b in gate["blockers"][:5]:
+                    log("      · %s：%s" % (b[0], b[2]), quiet=True)
+                state["blocked_sig"] = sig
+                save_state(state)
+            return 1
+        if state.get("blocked_sig"):
+            state["blocked_sig"] = None
+            save_state(state)
+        if gate.get("warnings"):
+            for w in gate["warnings"][:5]:
+                log("[警] %s：%s" % (w[0], w[2]), quiet=True)
+
         names = [r["cn"] for r in res["results"] if r["ok"]]
-        msg = "自动同步：%s（%s）" % (
-            "、".join(names) if len(names) <= 3 else "%d 个技能" % len(names),
-            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+        head = "、".join(names) if len(names) <= 3 else "%d 个技能" % len(names)
+        notes = gate_commit_note(gate)
+        msg = "自动同步：%s（%s）" % (head, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+        if notes:
+            msg += "\n\n" + "\n".join("- " + n for n in notes)
     else:
         msg = "自动同步：补推本地未推送的 commit"
 
     ok, how = commit_and_push(msg)
     log(("成功 —— " if ok else "失败 —— ") + how, quiet=True)
+    return 0 if ok else 1
+
+
+# ===================== 闸门相关命令 =====================
+
+def cmd_scan(only=None):
+    roster = load_roster()
+    res = do_pack(roster, quiet=True)
+    zip_map = {r["dir"]: r.get("zip") for r in res["results"] if r.get("ok")}
+    sel = [s for s in roster if not only or s["dir"] == only]
+    out = guard.precheck(sel, REPO_DIR, SKILLS_SRC, zip_map, EXCLUDE_DIRS, EXCLUDE_FILES,
+                         report_dir=REVIEW_DIR, tag="scan", strict=load_strict())
+    print("== 投毒扫描（基准 = 上一次已放行状态）==")
+    for r in out["results"]:
+        if r["no_change"]:
+            print("  [净] %-40s 与已放行版本一致" % r["dir"])
+        else:
+            d = r["diff"]
+            print("  [变] %-40s 新增 %d / 改动 %d / 删除 %d" % (
+                r["dir"], len(d["added"]), len(d["changed"]), len(d["removed"])))
+    print_gate(out)
+    repo_hits = guard.scan_repo(REPO_DIR)
+    for f, lvl, name, why, ev in repo_hits:
+        print("[拦] 仓库文件 %s：%s —— %s" % (f, name, why))
+    if out["blockers"] or repo_hits:
+        if out["report"]:
+            print("     待审报告：%s" % out["report"])
+        return 1
+    print("[净] 没命中任何高危规则。")
+    return 0
+
+
+def cmd_review():
+    if not os.path.isdir(REVIEW_DIR):
+        print("没有待审报告。")
+        return 0
+    files = sorted(f for f in os.listdir(REVIEW_DIR) if f.endswith(".md"))
+    if not files:
+        print("没有待审报告。")
+        return 0
+    print("== 待审报告共 %d 份（最新在后）==" % len(files))
+    for f in files[-10:]:
+        p = os.path.join(REVIEW_DIR, f)
+        print("  %s  (%.1f KB)" % (f, os.path.getsize(p) / 1024))
+    print("\n最新一份：%s" % os.path.join(REVIEW_DIR, files[-1]))
+    if os.path.exists(APPROVAL_LOG):
+        print("\n---- 放行记录尾部 ----")
+        for ln in open(APPROVAL_LOG, encoding="utf-8", errors="replace").read().strip().splitlines()[-6:]:
+            print("  " + ln)
+    return 0
+
+
+def cmd_approve(dirs, force=False):
+    roster = load_roster()
+    missing = [d for d in dirs if not any(s["dir"] == d for s in roster)]
+    if missing:
+        print("[!] 名单里没有：%s" % "、".join(missing))
+        return 1
+    res = do_pack(roster, quiet=True)
+    gate = run_gate(res["results"], approved=dirs, tag="approve", emit_report=True)
+    print_gate(gate)
+    if gate["blockers"]:
+        print("[拦] 仍有未放行的拦截项：%s" % "、".join(sorted({b[0] for b in gate["blockers"]})))
+        print("     报告：%s" % gate["report"])
+        print("     要一次性绕过全部拦截（不建议）：--approve %s --force" % ",".join(sorted({b[0] for b in gate["blockers"]})))
+        if not force:
+            return 1
+        print("[警] --force：无视剩余拦截项，强制放行")
+    msg = "人工放行：%s（%s）" % ("、".join(dirs), datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+    notes = gate_commit_note(gate)
+    if notes:
+        msg += "\n\n" + "\n".join("- " + n for n in notes)
+    ok, how = commit_and_push(msg)
+    print(("[OK] " if ok else "[!] ") + how)
+    if ok:
+        print("     放行记录：%s" % APPROVAL_LOG)
     return 0 if ok else 1
 
 
@@ -622,6 +811,11 @@ def main():
     ap.add_argument("--status", action="store_true", help="看自动同步状态")
     ap.add_argument("--install-agent", action="store_true", help="装 macOS 后台自动同步任务")
     ap.add_argument("--uninstall-agent", action="store_true", help="卸掉后台自动同步任务")
+    ap.add_argument("--scan", nargs="?", const="", metavar="DIR", help="只做投毒扫描，不推送")
+    ap.add_argument("--review", action="store_true", help="看待审报告与放行记录")
+    ap.add_argument("--approve", metavar="DIR[,DIR]", help="人工放行被拦的技能，放行后推送")
+    ap.add_argument("--strict", metavar="on|off", help="严格模式：任何源码改动都要人工放行")
+    ap.add_argument("--force", action="store_true", help="无视投毒闸门强制推送（危险，慎用）")
     args = ap.parse_args()
 
     if args.install_agent:
@@ -634,6 +828,18 @@ def main():
         return usage_ranking()
     if args.auto:
         return auto_run()
+    if args.review:
+        return cmd_review()
+    if args.scan is not None:
+        return cmd_scan(args.scan.strip() or None)
+    if args.strict is not None:
+        v = args.strict.strip().lower() in ("on", "1", "true", "yes", "开")
+        set_strict(v)
+        print("[OK] 严格模式：%s" % ("已开启（任何源码改动都要人工放行）" if v else "已关闭"))
+        return 0
+    if args.approve:
+        dirs = [d.strip().rstrip("/") for d in args.approve.split(",") if d.strip()]
+        return cmd_approve(dirs, force=args.force)
 
     roster = load_roster()
 
@@ -647,7 +853,24 @@ def main():
         else:
             roster.append({"cn": auto_cn_name(d), "dir": d})
             save_roster(roster)
-            print("[OK] 已收录：%s（%s）" % (auto_cn_name(d), d))
+            # 首次收录先过投毒扫描：「首次收录」本身不算拦截（--add 就是人的确认动作），
+            # 但任何高危命中都拒绝收录。
+            res0 = do_pack(roster, quiet=True)
+            gate0 = run_gate(res0["results"], tag="add", emit_report=True)
+            mine = [b for b in gate0["blockers"] if b[0] == d and "已审版本" not in b[2]]
+            if mine and not args.force:
+                roster = [s for s in roster if s["dir"] != d]
+                save_roster(roster)
+                print("[拒] %s 有 %d 项高危命中，已退回名单，不收录。" % (d, len(mine)))
+                for b in mine[:8]:
+                    print("       · %s —— %s" % (b[2], b[4]))
+                print("     待审报告：%s" % gate0["report"])
+                print("     确认是误报后可用：--add %s --force" % d)
+                return 1
+            if gate0["warnings"]:
+                for w in gate0["warnings"]:
+                    print("[警] %s —— %s" % (w[2], w[4]))
+            print("[OK] 已收录并通过扫描：%s（%s）" % (auto_cn_name(d), d))
             if agent_loaded():
                 install_agent()
 
@@ -700,9 +923,23 @@ def main():
     if args.push is not None:
         msg = args.push.strip() or "同步技能 %s" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
         print("-" * 66)
+        if args.force:
+            print("[警] --force：跳过投毒闸门")
+        else:
+            gate = run_gate(res["results"], tag="push")
+            if gate["blockers"] or gate["warnings"]:
+                print_gate(gate)
+            if gate["blockers"]:
+                print("[拦] 投毒闸门拦下 %d 项，未推送。" % len(gate["blockers"]))
+                print("     待审报告：%s" % gate["report"])
+                print("     人工确认无误后放行：python3 sync_skills.py --approve %s" % gate["blockers"][0][0])
+                return 1
+            notes = gate_commit_note(gate)
+            if notes:
+                msg += "\n\n" + "\n".join("- " + n for n in notes)
         ok, how = commit_and_push(msg)
         print(("[OK] " if ok else "[!] ") + how)
-        if ok and how == "直连" or (ok and how.startswith("走")):
+        if ok and how != "无需推送":
             print("     仓库：%s" % res["manifest"]["repo"])
         return 0 if ok else 1
 
