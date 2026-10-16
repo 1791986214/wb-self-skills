@@ -3,7 +3,7 @@
   "repo": "https://github.com/1791986214/wb-self-skills",
   "purpose": "自用 WorkBuddy 自制技能归档：中文名备注 + zip 打包，改动后自动同步",
   "source_dir": "/Users/lang/.workbuddy/skills",
-  "updated": "2026-10-15 18:00:24",
+  "updated": "2026-10-16 11:28:31",
   "count": 3,
   "total_size_human": "505 KB",
   "skills": [
@@ -28,9 +28,9 @@
       "triggers": "",
       "zip": "02-项目架构归一化框架图(archinorm).zip",
       "size_human": "488 KB",
-      "sha256": "9289b3abb0f7943ec495b15d066078c50d37c02f0915eb76f6899f86c93c4c7f",
+      "sha256": "1eaa254d4ee5fd8a21eab330b22da34bc2889fdffafefbe88657a89ffbb1a6bd",
       "files": 278,
-      "src_updated": "2026-10-15",
+      "src_updated": "2026-10-16",
       "install": "解压后把 archinorm/ 整个放进 ~/.workbuddy/skills/"
     },
     {
