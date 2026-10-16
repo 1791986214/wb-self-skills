@@ -3,9 +3,9 @@
   "repo": "https://github.com/1791986214/wb-self-skills",
   "purpose": "自用 WorkBuddy 自制技能归档：中文名备注 + zip 打包，改动后自动同步",
   "source_dir": "/Users/lang/.workbuddy/skills",
-  "updated": "2026-10-16 11:29:25",
+  "updated": "2026-10-16 14:56:13",
   "count": 3,
-  "total_size_human": "507 KB",
+  "total_size_human": "510 KB",
   "skills": [
     {
       "no": "01",
@@ -27,8 +27,8 @@
       "summary": "项目框架·归一化框架图构建器。把项目架构写成归一化的分形模块树，并渲染成深色交互式架构图（节点链路图 + 依赖曲线 + 语义着色 + 下钻面板）。触发词：架构图、框架图、结构图、模块树、项目结构、画架构、代码地图、archinorm、归一化、迁移项目、给项目建结构。凡涉及代码的项目在设计或开发阶段应默认套用本框架。",
       "triggers": "",
       "zip": "02-项目架构归一化框架图(archinorm).zip",
-      "size_human": "490 KB",
-      "sha256": "fdcb45ca96307537726229117917f130e8fc03c080a992990225b103c700eff2",
+      "size_human": "493 KB",
+      "sha256": "d9d217c1f11b24a5c587a4714de7b7fe314f4ffef4af054d94371663203cd585",
       "files": 278,
       "src_updated": "2026-10-16",
       "install": "解压后把 archinorm/ 整个放进 ~/.workbuddy/skills/"
