@@ -3,7 +3,7 @@
   "repo": "https://github.com/1791986214/wb-self-skills",
   "purpose": "自用 WorkBuddy 自制技能归档：中文名备注 + zip 打包，改动后自动同步",
   "source_dir": "/Users/lang/.workbuddy/skills",
-  "updated": "2026-10-20 14:10:19",
+  "updated": "2026-10-20 18:13:01",
   "count": 4,
   "total_size_human": "4.8 MB",
   "skills": [
@@ -37,13 +37,13 @@
       "no": "03",
       "cn_name": "项目地图",
       "dir_name": "project-map-skill",
-      "summary": "【v1.2.2】项目地图——把「项目计划 / 项目指令 / 项目资产 / 项目记忆」等口头术语映射到具体载体与工具；收工自动做「记忆双写 + 资产同步」",
+      "summary": "【v1.2.3】项目地图——把「项目计划 / 项目指令 / 项目资产 / 项目记忆」等口头术语映射到具体载体与工具；收工自动做「记忆双写 + 资产同步」",
       "triggers": "",
       "zip": "03-项目地图(project-map-skill).zip",
       "size_human": "12 KB",
-      "sha256": "f023862596474810cf661192ce2502500bb6e219ec5ad7a7d5eee528ad5567e3",
+      "sha256": "08b00661707e22a70be643d3f5a1888a904b046821652a17d3aa03aa1c0b96b9",
       "files": 2,
-      "src_updated": "2026-10-13",
+      "src_updated": "2026-10-20",
       "install": "解压后把 project-map-skill/ 整个放进 ~/.workbuddy/skills/"
     },
     {
