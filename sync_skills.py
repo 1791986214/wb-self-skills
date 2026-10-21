@@ -231,7 +231,8 @@ def pack_one(entry, index):
         "no": no,
         "cn": cn,
         "dir": src_dir,
-        "zip": zip_name,
+        "category": safe_cat,
+        "zip": zip_rel,
         "kb": round(len(buf) / 1024, 1),
         "files": files,
         "sha256": sha,
@@ -318,7 +319,10 @@ def build_manifest(results, roster, updated=None, prev=None):
 
 def render_table(manifest):
     latest = max((it.get("src_updated") or "" for it in manifest["skills"]), default="")
-    lines = [
+    cats = manifest.get("categories") or {}
+    cat_line = ("**分类**（按 `skills/<分类>/` 分目录）：" +
+                " · ".join("%s %d" % (k, v) for k, v in cats.items())) if cats else ""
+    lines = ([cat_line, ""] if cat_line else []) + [
         "| 编号 | 分类 | 中文名 | 技能目录名 | 说明 | 体积 | 技能更新 |",
         "|:---:|---|---|---|---|:---:|:---:|",
     ]
@@ -393,10 +397,20 @@ def do_pack(roster, quiet=False):
     keep = {r["zip"] for r in results if r["ok"]}
     removed = []
     if os.path.isdir(ZIP_DIR):
-        for f in os.listdir(ZIP_DIR):
-            if f.endswith(".zip") and f not in keep:
-                os.remove(os.path.join(ZIP_DIR, f))
-                removed.append(f)
+        # 递归清理：分类目录子层级也要扫，否则换了分类会留下孤儿包
+        for root, _dirs, files in os.walk(ZIP_DIR):
+            for f in files:
+                if not f.endswith(".zip"):
+                    continue
+                full = os.path.join(root, f)
+                rel = os.path.relpath(full, ZIP_DIR).replace(os.sep, "/")
+                if rel not in keep:
+                    os.remove(full)
+                    removed.append(rel)
+        # 顺手删掉空分类目录
+        for root, _dirs, files in os.walk(ZIP_DIR, topdown=False):
+            if root != ZIP_DIR and not os.listdir(root):
+                os.rmdir(root)
 
     return {"results": results, "fail": fail, "manifest": manifest,
             "changed": changed, "readme_changed": readme_changed,
