@@ -3,7 +3,7 @@
   "repo": "https://github.com/1791986214/wb-self-skills",
   "purpose": "自用 WorkBuddy 自制技能归档：中文名备注 + zip 打包，改动后自动同步",
   "source_dir": "/Users/lang/.workbuddy/skills",
-  "updated": "2026-10-21 16:24:33",
+  "updated": "2026-10-21 16:34:38",
   "count": 7,
   "categories": {
     "网页设计": 3,
@@ -12,7 +12,7 @@
     "项目管理": 1,
     "动效视频": 1
   },
-  "total_size_human": "7.3 MB",
+  "total_size_human": "8.0 MB",
   "skills": [
     {
       "no": "01",
@@ -78,9 +78,9 @@
       "summary": "15 个子技能打包成一个完整技能：设计总纲、动效构建/评审/改造/机会/性能/词汇、Apple 设计原则、UI 库选型、多版原型、网页像原生、UI 极端数据压测、Sonner 通知、Expo 动效、Swift 写法",
       "triggers": "",
       "zip": "05-界面设计与动效技能集(emil-skills).zip",
-      "size_human": "133 KB",
-      "sha256": "77c1890b55027e0ed4fb51e3b22e333adeccab90cc9a71bc61be0ba36c13c0b9",
-      "files": 26,
+      "size_human": "322 KB",
+      "sha256": "943e8e2d31415d833b1d3ef6c9d548b1153b886e6290cc915b3a197cb6c60863",
+      "files": 27,
       "src_updated": "2026-10-21",
       "install": "解压后把 emil-skills/ 整个放进 ~/.workbuddy/skills/"
     },
@@ -92,9 +92,9 @@
       "summary": "液态玻璃（Liquid Glass）完整实现：透镜 Lens 的实时折射 .90 / 雾化 .24 / 色散 .65 / 弹性 .70，18 类玻璃组件、13 种合成音效、零运行时依赖；含七类元素归属与组件准入规则",
       "triggers": "",
       "zip": "06-液态玻璃设计体系(design-systems).zip",
-      "size_human": "11 KB",
-      "sha256": "92794162f16cb92f38c337c75eab1328c10b233cb836563a6721984546dfda2b",
-      "files": 4,
+      "size_human": "371 KB",
+      "sha256": "1ebd9306ff59ad25f4d5b83e562c50f9303fa3340db3cb333dc9ce7e209cecad",
+      "files": 5,
       "src_updated": "2026-10-21",
       "install": "解压后把 design-systems/ 整个放进 ~/.workbuddy/skills/"
     },
@@ -106,9 +106,9 @@
       "summary": "10–30 秒产品动效片：界面用 HTML 重建、实测动作库、真实运动模糊、连贯度自动验收",
       "triggers": "",
       "zip": "07-一镜到底动效片(onetake).zip",
-      "size_human": "2.4 MB",
-      "sha256": "e6b30b000d142b730fb0a19e8c10e65fcbb5e3d98688ccfeb8b59f038ad30331",
-      "files": 63,
+      "size_human": "2.5 MB",
+      "sha256": "ae5430e6d9418ac8cd2c849c3799265cc44a025ed65b0d7a111cd062638f8552",
+      "files": 64,
       "src_updated": "2026-10-21",
       "install": "解压后把 onetake/ 整个放进 ~/.workbuddy/skills/"
     }
