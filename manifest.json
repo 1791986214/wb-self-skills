@@ -3,7 +3,7 @@
   "repo": "https://github.com/1791986214/wb-self-skills",
   "purpose": "自用 WorkBuddy 自制技能归档：中文名备注 + zip 打包，改动后自动同步",
   "source_dir": "/Users/lang/.workbuddy/skills",
-  "updated": "2026-10-21 16:08:59",
+  "updated": "2026-10-21 16:20:04",
   "count": 21,
   "categories": {
     "网页设计": 15,
@@ -80,7 +80,7 @@
       "triggers": "",
       "zip": "05-界面设计总纲(emil-design-eng).zip",
       "size_human": "16 KB",
-      "sha256": "13b8f1ac79c7eeddbd78fd7e82cc1858ccf1be8674afca4e8ccf19300e9bac2f",
+      "sha256": "ec70efa8f609fe77df3c40db90b4d8e9bebf7dbab4cb5997035ada64d3e4f408",
       "files": 3,
       "src_updated": "2026-10-21",
       "install": "解压后把 emil-design-eng/ 整个放进 ~/.workbuddy/skills/"
@@ -94,7 +94,7 @@
       "triggers": "",
       "zip": "06-动效构建(animate).zip",
       "size_human": "14 KB",
-      "sha256": "84b471af0861fedfd19648da2662487b53afc6de20ca282db9cd34cc7c8eb233",
+      "sha256": "1cdc6081007ef68a16e95a37deb2e600fd9fcb6c640331ba7755cdd37aacd32d",
       "files": 4,
       "src_updated": "2026-10-21",
       "install": "解压后把 animate/ 整个放进 ~/.workbuddy/skills/"
@@ -108,7 +108,7 @@
       "triggers": "",
       "zip": "07-动效评审(review-animations).zip",
       "size_human": "14 KB",
-      "sha256": "b1fcc43e216454989dafc2de660b525090ff1f14db4b76fc87ad215199ba798e",
+      "sha256": "7c86b7704dd3ce1f5b7aba5799db41007fd48ebf646eb05b494272594d83b69c",
       "files": 4,
       "src_updated": "2026-10-21",
       "install": "解压后把 review-animations/ 整个放进 ~/.workbuddy/skills/"
@@ -122,7 +122,7 @@
       "triggers": "",
       "zip": "08-动效改造(improve-animations).zip",
       "size_human": "15 KB",
-      "sha256": "750240ad0e3018f9a2057980a8244a6a51e24fac750d0c0373ab1b7558b6770c",
+      "sha256": "529448fd8926029370ad4baa4125356994f181ee9ebb885c989c00b1951e2d78",
       "files": 5,
       "src_updated": "2026-10-21",
       "install": "解压后把 improve-animations/ 整个放进 ~/.workbuddy/skills/"
@@ -136,7 +136,7 @@
       "triggers": "",
       "zip": "09-动效机会发现(find-animation-opportunities).zip",
       "size_human": "11 KB",
-      "sha256": "91dfbfcb65b8c2ce02217c2002739b14a7dda3ac7cc4864a06563d6725a59abe",
+      "sha256": "a5b7eb1e87b98b6a7ed8b48258ea653e17a30d72432df9eee68095ebd007795c",
       "files": 3,
       "src_updated": "2026-10-21",
       "install": "解压后把 find-animation-opportunities/ 整个放进 ~/.workbuddy/skills/"
@@ -150,7 +150,7 @@
       "triggers": "",
       "zip": "10-动效性能(animation-performance).zip",
       "size_human": "12 KB",
-      "sha256": "c9ff3b4c81127b907518dcbdbd4064f0c919a7d806c26e4e9040d0d1d738ac9d",
+      "sha256": "cfc4beae31dc7ebd79bb1c3a5296e3209ea9afeecedb6b2f9a215510408cb31e",
       "files": 3,
       "src_updated": "2026-10-21",
       "install": "解压后把 animation-performance/ 整个放进 ~/.workbuddy/skills/"
@@ -164,7 +164,7 @@
       "triggers": "",
       "zip": "11-动效词汇(animation-vocabulary).zip",
       "size_human": "11 KB",
-      "sha256": "1241dd6cfc139b1a4e10d04427d45e5ff6b988308babd70445eff23f92fac255",
+      "sha256": "f6553fe61b9b170e0220ba5151c118a20cb6ec668def9b69458f6932cd98c2d4",
       "files": 3,
       "src_updated": "2026-10-21",
       "install": "解压后把 animation-vocabulary/ 整个放进 ~/.workbuddy/skills/"
@@ -178,7 +178,7 @@
       "triggers": "",
       "zip": "12-Apple 设计原则(apple-design).zip",
       "size_human": "16 KB",
-      "sha256": "f2e5c0a4f9be62dce8c673259bd7816182cb739277bdd1bb90a504d41a0e2c39",
+      "sha256": "3e7d05f1642def5f08f4790754a95b65f2b40f4cff8b75fd98e9965fac90b3a1",
       "files": 3,
       "src_updated": "2026-10-21",
       "install": "解压后把 apple-design/ 整个放进 ~/.workbuddy/skills/"
@@ -192,7 +192,7 @@
       "triggers": "",
       "zip": "13-UI 库选型(pick-ui-library).zip",
       "size_human": "8 KB",
-      "sha256": "037ab28ab777db59cedc128181bc5d35e6cf7ccd302da1269b9758ca7d3e1c69",
+      "sha256": "1a6ab8039201efa7ac4100b941c8c09b0bed0e864718832a5c48ac97bce8bf5c",
       "files": 3,
       "src_updated": "2026-10-21",
       "install": "解压后把 pick-ui-library/ 整个放进 ~/.workbuddy/skills/"
@@ -206,7 +206,7 @@
       "triggers": "",
       "zip": "14-多版原型(prototype).zip",
       "size_human": "13 KB",
-      "sha256": "30d09dab8eeb328826c7fa91220d845e1ea786f7beca6801dedcaf0db7e4359d",
+      "sha256": "fb7403f97a1e4e51a5113050e09bfd91c10c0f0be270fd549fe67e7fcda9aacd",
       "files": 4,
       "src_updated": "2026-10-21",
       "install": "解压后把 prototype/ 整个放进 ~/.workbuddy/skills/"
@@ -220,7 +220,7 @@
       "triggers": "",
       "zip": "15-网页像原生(mobile-native).zip",
       "size_human": "13 KB",
-      "sha256": "3825bb6515ed8b74d4f9fa8bcdb54c2fb056707f16fea89d67ea0f97b9cc3f5e",
+      "sha256": "7639c3d45281379bb97b15afb2c73517ac01dfaab468fd7c714c68b7dced4ccc",
       "files": 3,
       "src_updated": "2026-10-21",
       "install": "解压后把 mobile-native/ 整个放进 ~/.workbuddy/skills/"
@@ -234,7 +234,7 @@
       "triggers": "",
       "zip": "16-UI 极端数据压测(break-ui).zip",
       "size_human": "17 KB",
-      "sha256": "665867e529d5431c18a24a7070dae64da4a61cf1ed915b40706ca7574969a1a5",
+      "sha256": "d009541b444f29a23708078de5e399aa0266deda4ab0ea249b7329cc25e05ae0",
       "files": 4,
       "src_updated": "2026-10-21",
       "install": "解压后把 break-ui/ 整个放进 ~/.workbuddy/skills/"
@@ -248,7 +248,7 @@
       "triggers": "",
       "zip": "17-Sonner 通知(ask-sonner).zip",
       "size_human": "11 KB",
-      "sha256": "f95c3a8c84da81703162ff67328360916a6f0a0e4caea57274e432ff94b27af6",
+      "sha256": "6674f28d8957a1fa660779b13bcc801014493471b252b0a567773359dbedb69a",
       "files": 4,
       "src_updated": "2026-10-21",
       "install": "解压后把 ask-sonner/ 整个放进 ~/.workbuddy/skills/"
@@ -262,7 +262,7 @@
       "triggers": "",
       "zip": "18-三套 Web 设计体系(design-systems).zip",
       "size_human": "10 KB",
-      "sha256": "00fbc62736d1e88a55706cd26eb3db635083351a471e13d0ac0340ebf25b81e8",
+      "sha256": "9ae6c698aa62d627b5e324eb314e50ba35150829d54e1c062e7e4d1674a246c3",
       "files": 4,
       "src_updated": "2026-10-21",
       "install": "解压后把 design-systems/ 整个放进 ~/.workbuddy/skills/"
@@ -276,7 +276,7 @@
       "triggers": "",
       "zip": "19-Expo 动效(animate-expo).zip",
       "size_human": "20 KB",
-      "sha256": "b44056c869ce195adceda8304fde37afc17ebd1949e347140377ecfa1f7233f2",
+      "sha256": "da6bc8f5f0bc60bc8302382ba760882aecaa82c8685ae930ab4b1b11afc8ef2b",
       "files": 4,
       "src_updated": "2026-10-21",
       "install": "解压后把 animate-expo/ 整个放进 ~/.workbuddy/skills/"
@@ -290,7 +290,7 @@
       "triggers": "",
       "zip": "20-Swift 现代写法(write-swift).zip",
       "size_human": "22 KB",
-      "sha256": "7799fe0c9d2f13f335a807d89457bf94e106e6066931d1982868af91a714f87a",
+      "sha256": "f8a84e7fc47e11155e40fb7a025baaea774b90e770d01a3de2c9b0ea8100d4de",
       "files": 3,
       "src_updated": "2026-10-21",
       "install": "解压后把 write-swift/ 整个放进 ~/.workbuddy/skills/"
@@ -304,7 +304,7 @@
       "triggers": "",
       "zip": "21-一镜到底动效片(onetake).zip",
       "size_human": "2.4 MB",
-      "sha256": "5a521005d646555b05190048b28dfe99797bf7c5cc3b2ffb790b694fa3824a05",
+      "sha256": "29d146acd2c5b4fd8c54e5d8b282ce01c7c61b72aae7bd20fff8ca01dd174808",
       "files": 63,
       "src_updated": "2026-10-21",
       "install": "解压后把 onetake/ 整个放进 ~/.workbuddy/skills/"
