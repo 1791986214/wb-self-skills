@@ -280,6 +280,7 @@ def build_manifest(results, roster, updated=None, prev=None):
             "no": res.get("no"),
             "cn_name": res.get("cn"),
             "dir_name": res["dir"],
+            "category": entry.get("category") or "未分类",
             "summary": entry.get("summary") or auto_summary(res["dir"]),
             "triggers": entry.get("triggers", ""),
             "zip": res.get("zip"),
@@ -293,6 +294,11 @@ def build_manifest(results, roster, updated=None, prev=None):
             item["error"] = res["error"]
         items.append(item)
 
+    # 分类汇总：让读 manifest 的人一眼看到技能库怎么分的组
+    cats = {}
+    for it in items:
+        cats[it.get("category") or "未分类"] = cats.get(it.get("category") or "未分类", 0) + 1
+
     return {
         "name": "小乐技能库",
         "repo": "https://github.com/1791986214/wb-self-skills",
@@ -300,6 +306,7 @@ def build_manifest(results, roster, updated=None, prev=None):
         "source_dir": SKILLS_SRC,
         "updated": updated or datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "count": len(items),
+        "categories": dict(sorted(cats.items(), key=lambda kv: -kv[1])),
         "total_size_human": human(sum(r.get("kb", 0) for r in results if r["ok"])),
         "skills": items,
     }
@@ -308,13 +315,13 @@ def build_manifest(results, roster, updated=None, prev=None):
 def render_table(manifest):
     latest = max((it.get("src_updated") or "" for it in manifest["skills"]), default="")
     lines = [
-        "| 编号 | 中文名 | 技能目录名 | 说明 | 体积 | 技能更新 |",
-        "|:---:|---|---|---|:---:|:---:|",
+        "| 编号 | 分类 | 中文名 | 技能目录名 | 说明 | 体积 | 技能更新 |",
+        "|:---:|---|---|---|---|:---:|:---:|",
     ]
     for it in manifest["skills"]:
         summary = (it.get("summary") or "").replace("|", "／")
-        lines.append("| {no} | **{cn}** | `{dir}` | {s} | {size} | {upd} |".format(
-            no=it["no"], cn=it["cn_name"], dir=it["dir_name"],
+        lines.append("| {no} | {cat} | **{cn}** | `{dir}` | {s} | {size} | {upd} |".format(
+            no=it["no"], cat=it.get("category") or "未分类", cn=it["cn_name"], dir=it["dir_name"],
             s=summary, size=it.get("size_human") or "打包失败",
             upd=it.get("src_updated") or "-"))
     lines.append("")

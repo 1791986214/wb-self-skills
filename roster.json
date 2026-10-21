@@ -5,24 +5,114 @@
     "减技能：python3 sync_skills.py --remove <技能目录名>",
     "看排行：python3 sync_skills.py --usage",
     "看闸门状态：python3 sync_skills.py --status",
-    "打包上传：python3 sync_skills.py --push \"说明\""
+    "打包上传：python3 sync_skills.py --push \"说明\"",
+    "分类：roster 条目里的 category 字段，会同步进 manifest.json 并显示在 README 表格"
   ],
   "skills": [
     {
       "cn": "离线HTML工作台改版发版",
-      "dir": "offline-html-workbench-patch-release"
+      "dir": "offline-html-workbench-patch-release",
+      "category": "交付与发版"
     },
     {
       "cn": "项目架构归一化框架图",
-      "dir": "archinorm"
+      "dir": "archinorm",
+      "category": "架构可视化"
     },
     {
       "cn": "项目地图",
-      "dir": "project-map-skill"
+      "dir": "project-map-skill",
+      "category": "项目管理"
     },
     {
       "cn": "archify",
-      "dir": "archify"
+      "dir": "archify",
+      "category": "网页设计"
+    },
+    {
+      "cn": "界面设计总纲",
+      "dir": "emil-design-eng",
+      "category": "网页设计"
+    },
+    {
+      "cn": "动效构建",
+      "dir": "animate",
+      "category": "网页设计"
+    },
+    {
+      "cn": "动效评审",
+      "dir": "review-animations",
+      "category": "网页设计"
+    },
+    {
+      "cn": "动效改造",
+      "dir": "improve-animations",
+      "category": "网页设计"
+    },
+    {
+      "cn": "动效机会发现",
+      "dir": "find-animation-opportunities",
+      "category": "网页设计"
+    },
+    {
+      "cn": "动效性能",
+      "dir": "animation-performance",
+      "category": "网页设计"
+    },
+    {
+      "cn": "动效词汇",
+      "dir": "animation-vocabulary",
+      "category": "网页设计"
+    },
+    {
+      "cn": "Apple 设计原则",
+      "dir": "apple-design",
+      "category": "网页设计"
+    },
+    {
+      "cn": "UI 库选型",
+      "dir": "pick-ui-library",
+      "category": "网页设计"
+    },
+    {
+      "cn": "多版原型",
+      "dir": "prototype",
+      "category": "网页设计"
+    },
+    {
+      "cn": "网页像原生",
+      "dir": "mobile-native",
+      "category": "网页设计"
+    },
+    {
+      "cn": "UI 极端数据压测",
+      "dir": "break-ui",
+      "category": "网页设计"
+    },
+    {
+      "cn": "Sonner 通知",
+      "dir": "ask-sonner",
+      "category": "网页设计"
+    },
+    {
+      "cn": "三套 Web 设计体系",
+      "dir": "design-systems",
+      "category": "网页设计"
+    },
+    {
+      "cn": "Expo 动效",
+      "dir": "animate-expo",
+      "category": "移动端"
+    },
+    {
+      "cn": "Swift 现代写法",
+      "dir": "write-swift",
+      "category": "移动端"
+    },
+    {
+      "cn": "一镜到底动效片",
+      "dir": "onetake",
+      "category": "动效视频"
     }
   ]
 }
