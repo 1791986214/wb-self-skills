@@ -3,7 +3,7 @@
   "repo": "https://github.com/1791986214/wb-self-skills",
   "purpose": "自用 WorkBuddy 自制技能归档：中文名备注 + zip 打包，改动后自动同步",
   "source_dir": "/Users/lang/.workbuddy/skills",
-  "updated": "2026-10-21 17:43:54",
+  "updated": "2026-10-21 17:45:08",
   "count": 7,
   "categories": {
     "网页设计": 4,
@@ -11,7 +11,7 @@
     "架构可视化": 1,
     "项目管理": 1
   },
-  "total_size_human": "8.2 MB",
+  "total_size_human": "8.3 MB",
   "skills": [
     {
       "no": "01",
@@ -105,8 +105,8 @@
       "summary": "网页动效设计参考 + 可出片：6 份设计手册（节奏与衔接、构图、动作库、参考片拆解、功能演示、声音）、38 个实测动作、11 部成片；据此做 10–30 秒产品动效片",
       "triggers": "",
       "zip": "网页设计/07-一镜到底动效设计(onetake).zip",
-      "size_human": "2.5 MB",
-      "sha256": "8114fa40e6d7f12c06147169ff263df95dbc146d2865f5dee6c8e0ce1a0af307",
+      "size_human": "2.6 MB",
+      "sha256": "14e02ecbfd5740b26c427b1f02a7dbe5dce89595615fad20d3045e5ba57a054c",
       "files": 64,
       "src_updated": "2026-10-21",
       "install": "解压后把 onetake/ 整个放进 ~/.workbuddy/skills/"
