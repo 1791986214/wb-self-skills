@@ -17,7 +17,7 @@
 | 01 | 交付与发版 | **离线HTML工作台改版发版** | `offline-html-workbench-patch-release` | 给「单文件离线 HTML 工作台 + Python 启动器 + 云端更新源」这类交付物做小改并安全发版的完整链路——二进制补丁保 CRLF、抽 script 块做语法回归、CDP 真实浏览器验证、版本号递增重打包、生成发版载荷并公网回读。触发词：改工作台、工作台.html、拿钱工具、离线 HTML 交付、发版到云端、更… | 6 KB | 2026-10-09 |
 | 02 | 架构可视化 | **项目架构归一化框架图** | `archinorm` | 项目框架·归一化框架图构建器。把项目架构写成归一化的分形模块树，并渲染成深色交互式架构图（节点链路图 + 依赖曲线 + 语义着色 + 下钻面板）。触发词：架构图、框架图、结构图、模块树、项目结构、画架构、代码地图、archinorm、归一化、迁移项目、给项目建结构。凡涉及代码的项目在设计或开发阶段应默认套用本框架。 | 507 KB | 2026-10-20 |
 | 03 | 项目管理 | **项目地图** | `project-map-skill` | 【v1.2.3】项目地图——把「项目计划 / 项目指令 / 项目资产 / 项目记忆」等口头术语映射到具体载体与工具；收工自动做「记忆双写 + 资产同步」 | 12 KB | 2026-10-21 |
-| 04 | 网页设计 | **archify** | `archify` | Create validated architecture, workflow, sequence, data-flow, lifecycle/state, ERD, class, tree, timeline, and waterfall diagrams as explorable standalone HTML … | 4.5 MB | 2026-10-21 |
+| 04 | 网页设计 | **archify · 架构图生成** | `archify` | 把需求或 Mermaid 写成可交互的单文件 HTML 图表：workflow / architecture / sequence / dataflow / lifecycle / erd / class / tree / timeline / waterfall / explainer，共 11 种；自带校验、finalize 原子交付与图像/WebM 导出 | 4.5 MB | 2026-10-21 |
 | 05 | 网页设计 | **界面设计与动效技能集** | `emil-skills` | 15 个子技能打包成一个完整技能：设计总纲、动效构建/评审/改造/机会/性能/词汇、Apple 设计原则、UI 库选型、多版原型、网页像原生、UI 极端数据压测、Sonner 通知、Expo 动效、Swift 写法 | 322 KB | 2026-10-21 |
 | 06 | 网页设计 | **液态玻璃设计体系** | `design-systems` | 液态玻璃（Liquid Glass）完整实现：透镜 Lens 的实时折射 .90 / 雾化 .24 / 色散 .65 / 弹性 .70，18 类玻璃组件、13 种合成音效、零运行时依赖；含七类元素归属与组件准入规则 | 426 KB | 2026-10-21 |
 | 07 | 动效视频 | **一镜到底动效片** | `onetake` | 10–30 秒产品动效片：界面用 HTML 重建、实测动作库、真实运动模糊、连贯度自动验收 | 2.5 MB | 2026-10-21 |

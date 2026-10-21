@@ -25,9 +25,10 @@
       "category": "项目管理"
     },
     {
-      "cn": "archify",
+      "cn": "archify · 架构图生成",
       "dir": "archify",
-      "category": "网页设计"
+      "category": "网页设计",
+      "summary": "把需求或 Mermaid 写成可交互的单文件 HTML 图表：workflow / architecture / sequence / dataflow / lifecycle / erd / class / tree / timeline / waterfall / explainer，共 11 种；自带校验、finalize 原子交付与图像/WebM 导出"
     },
     {
       "cn": "界面设计与动效技能集",

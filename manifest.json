@@ -3,7 +3,7 @@
   "repo": "https://github.com/1791986214/wb-self-skills",
   "purpose": "自用 WorkBuddy 自制技能归档：中文名备注 + zip 打包，改动后自动同步",
   "source_dir": "/Users/lang/.workbuddy/skills",
-  "updated": "2026-10-21 17:22:11",
+  "updated": "2026-10-21 17:27:57",
   "count": 7,
   "categories": {
     "网页设计": 3,
@@ -58,14 +58,14 @@
     },
     {
       "no": "04",
-      "cn_name": "archify",
+      "cn_name": "archify · 架构图生成",
       "dir_name": "archify",
       "category": "网页设计",
-      "summary": "Create validated architecture, workflow, sequence, data-flow, lifecycle/state, ERD, class, tree, timeline, and waterfall diagrams as explorable standalone HTML …",
+      "summary": "把需求或 Mermaid 写成可交互的单文件 HTML 图表：workflow / architecture / sequence / dataflow / lifecycle / erd / class / tree / timeline / waterfall / explainer，共 11 种；自带校验、finalize 原子交付与图像/WebM 导出",
       "triggers": "",
-      "zip": "网页设计/04-archify(archify).zip",
+      "zip": "网页设计/04-archify · 架构图生成(archify).zip",
       "size_human": "4.5 MB",
-      "sha256": "a2e16d76641ea1b9e8b8e62e84e486fed0d31a0d04d3447f6b9ad591fba03905",
+      "sha256": "5057a70e9e39bc8385f0e74e3923b0cdc949dcda7eeedd1ca6f2e99631b9c558",
       "files": 205,
       "src_updated": "2026-10-21",
       "install": "解压后把 archify/ 整个放进 ~/.workbuddy/skills/"
