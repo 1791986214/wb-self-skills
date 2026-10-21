@@ -3,7 +3,7 @@
   "repo": "https://github.com/1791986214/wb-self-skills",
   "purpose": "自用 WorkBuddy 自制技能归档：中文名备注 + zip 打包，改动后自动同步",
   "source_dir": "/Users/lang/.workbuddy/skills",
-  "updated": "2026-10-21 16:34:38",
+  "updated": "2026-10-21 16:44:13",
   "count": 7,
   "categories": {
     "网页设计": 3,
@@ -12,7 +12,7 @@
     "项目管理": 1,
     "动效视频": 1
   },
-  "total_size_human": "8.0 MB",
+  "total_size_human": "8.1 MB",
   "skills": [
     {
       "no": "01",
@@ -92,9 +92,9 @@
       "summary": "液态玻璃（Liquid Glass）完整实现：透镜 Lens 的实时折射 .90 / 雾化 .24 / 色散 .65 / 弹性 .70，18 类玻璃组件、13 种合成音效、零运行时依赖；含七类元素归属与组件准入规则",
       "triggers": "",
       "zip": "06-液态玻璃设计体系(design-systems).zip",
-      "size_human": "371 KB",
-      "sha256": "1ebd9306ff59ad25f4d5b83e562c50f9303fa3340db3cb333dc9ce7e209cecad",
-      "files": 5,
+      "size_human": "426 KB",
+      "sha256": "14d7bfe29e09cd8abcb346c2b2d3c0d25c2f2fa561be60c791cb5d4b1f3e22a5",
+      "files": 6,
       "src_updated": "2026-10-21",
       "install": "解压后把 design-systems/ 整个放进 ~/.workbuddy/skills/"
     },
