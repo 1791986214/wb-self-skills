@@ -52,7 +52,8 @@ SUBHINT = {
     "archify": ("支持 11 种图", [
         "workflow", "architecture", "sequence", "dataflow", "lifecycle",
         "erd", "class", "tree", "timeline", "waterfall", "explainer"]),
-    "onetake": ("上游成片素材", ["11 部短片", "38 个实测动作", "连贯度自动验收"]),
+    "onetake": ("含 6 份动效设计手册", [
+        "节奏与衔接", "构图", "动作库", "参考片拆解", "功能演示", "声音"]),
 }
 
 
