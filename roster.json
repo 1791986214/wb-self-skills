@@ -30,100 +30,16 @@
       "category": "网页设计"
     },
     {
-      "cn": "界面设计总纲",
-      "dir": "emil-design-eng",
+      "cn": "界面设计与动效技能集",
+      "dir": "emil-skills",
       "category": "网页设计",
-      "summary": "动效与界面判断总纲：曲线、时长、阴影与边框、层级关系，源自 Emil 在 Vercel / Linear 的实战经验"
+      "summary": "15 个子技能打包成一个完整技能：设计总纲、动效构建/评审/改造/机会/性能/词汇、Apple 设计原则、UI 库选型、多版原型、网页像原生、UI 极端数据压测、Sonner 通知、Expo 动效、Swift 写法"
     },
     {
-      "cn": "动效构建",
-      "dir": "animate",
-      "category": "网页设计",
-      "summary": "从零构建动效：先决定该不该动，再定属性、曲线、时长，以及如何被中断、如何退出"
-    },
-    {
-      "cn": "动效评审",
-      "dir": "review-animations",
-      "category": "网页设计",
-      "summary": "按严格规则逐条评审既有动效，指出哪一条不合格、为什么、怎么改"
-    },
-    {
-      "cn": "动效改造",
-      "dir": "improve-animations",
-      "category": "网页设计",
-      "summary": "扫全库动效，输出分优先级、可直接执行的改造计划"
-    },
-    {
-      "cn": "动效机会发现",
-      "dir": "find-animation-opportunities",
-      "category": "网页设计",
-      "summary": "找出界面里真正值得加动效的位置，并明确指出哪里不该加"
-    },
-    {
-      "cn": "动效性能",
-      "dir": "animation-performance",
-      "category": "网页设计",
-      "summary": "修掉帧的动效：合成层、布局抖动、transform/opacity 滥用等易漏细节"
-    },
-    {
-      "cn": "动效词汇",
-      "dir": "animation-vocabulary",
-      "category": "网页设计",
-      "summary": "用准确术语描述想要的动效，把「就是那种感觉」翻译成可执行指令"
-    },
-    {
-      "cn": "Apple 设计原则",
-      "dir": "apple-design",
-      "category": "网页设计",
-      "summary": "Apple 的界面与流体动效原则，从 WWDC 设计演讲提炼并翻译成 Web 做法"
-    },
-    {
-      "cn": "UI 库选型",
-      "dir": "pick-ui-library",
-      "category": "网页设计",
-      "summary": "按任务挑靠谱的 UI 库，避免手搓 toast、装到弃坑包"
-    },
-    {
-      "cn": "多版原型",
-      "dir": "prototype",
-      "category": "网页设计",
-      "summary": "同一个 UI 一次做多个版本，带切换器逐个对比挑一个"
-    },
-    {
-      "cn": "网页像原生",
-      "dir": "mobile-native",
-      "category": "网页设计",
-      "summary": "让网页在手机上像 App：hover 粘滞、点击高亮、100vh、输入框缩放、安全区"
-    },
-    {
-      "cn": "UI 极端数据压测",
-      "dir": "break-ui",
-      "category": "网页设计",
-      "summary": "用最坏数据把界面撑坏：超长名字、异常邮箱、超大数字、空列表、超长标签"
-    },
-    {
-      "cn": "Sonner 通知",
-      "dir": "ask-sonner",
-      "category": "网页设计",
-      "summary": "Sonner toast 库的安装、样式定制、常用配方与常见问题修复"
-    },
-    {
-      "cn": "三套 Web 设计体系",
+      "cn": "液态玻璃设计体系",
       "dir": "design-systems",
       "category": "网页设计",
-      "summary": "透镜 Lens / 点阵 Lattice / 序曲 Overture 三套原生 Web 设计体系的选型、取用与落地手册"
-    },
-    {
-      "cn": "Expo 动效",
-      "dir": "animate-expo",
-      "category": "移动端",
-      "summary": "React Native / Expo 动效：手势、弹层、触感、转场，以及把动效移出 JS 线程"
-    },
-    {
-      "cn": "Swift 现代写法",
-      "dir": "write-swift",
-      "category": "移动端",
-      "summary": "写现代 Swift：值类型、Swift 6 并发、泛型、性能与 Swift Testing"
+      "summary": "液态玻璃（Liquid Glass）完整实现：透镜 Lens 的实时折射 .90 / 雾化 .24 / 色散 .65 / 弹性 .70，18 类玻璃组件、13 种合成音效、零运行时依赖；含七类元素归属与组件准入规则"
     },
     {
       "cn": "一镜到底动效片",
