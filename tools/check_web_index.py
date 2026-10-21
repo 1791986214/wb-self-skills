@@ -52,31 +52,74 @@ def gif_header(path):
             "bytes": os.path.getsize(path)}
 
 
-def first_frame_lum(path):
-    """用纯 Python 粗算首帧亮度：只取调色板 + 首帧图像数据，不做完整解码。
+def _lzw_decode(min_code_size, data):
+    """GIF 变长 LZW 解码（标准实现，约 40 行）。"""
+    clear = 1 << min_code_size
+    end = clear + 1
+    code_size = min_code_size + 1
+    table = {i: bytes([i]) for i in range(clear)}
+    out = bytearray()
+    prev = None
+    bitbuf = 0
+    bitcnt = 0
+    nxt = end + 1
+    for byte in data:
+        bitbuf |= byte << bitcnt
+        bitcnt += 8
+        while bitcnt >= code_size:
+            code = bitbuf & ((1 << code_size) - 1)
+            bitbuf >>= code_size
+            bitcnt -= code_size
+            if code == clear:
+                table = {i: bytes([i]) for i in range(clear)}
+                code_size = min_code_size + 1
+                nxt = end + 1
+                prev = None
+                continue
+            if code == end:
+                return bytes(out)
+            if prev is None:
+                entry = table[code]
+            elif code in table:
+                entry = table[code]
+            elif code == nxt:
+                entry = prev + prev[:1]
+            else:
+                return bytes(out)
+            out += entry
+            if prev is not None:
+                table[nxt] = prev + entry[:1]
+                nxt += 1
+                if nxt == (1 << code_size) and code_size < 12:
+                    code_size += 1
+            prev = entry
+    return bytes(out)
 
-    做法：读全局调色板算平均色，再跳到图像描述符，统计像素索引的加权亮度。
-    够用来判断「是不是一片黑」。解析不了就返回 None（不拦）。
+
+def first_frame_lum(path):
+    """真解码首帧，按调色板算平均亮度（0~255）。
+
+    之前用「字节直方图取模」近似，会系统性偏低（把 emil 那张白底图判成 90），
+    所以改成老老实实解 LZW。
     """
     try:
         data = open(path, "rb").read()
         if data[:3] != b"GIF":
             return None
         flags = data[10]
-        has_gct = flags & 0x80
         gct_size = 2 ** ((flags & 0x07) + 1)
         pos = 13
         palette = []
-        if has_gct:
+        if flags & 0x80:
             for i in range(gct_size):
                 o = pos + i * 3
                 palette.append((data[o], data[o + 1], data[o + 2]))
             pos += gct_size * 3
         else:
             return None
-        # 找第一个图像描述符 0x2C
+        # 跳到第一个图像描述符
         while pos < len(data) and data[pos] != 0x2C:
-            if data[pos] == 0x21:            # 扩展块，跳过
+            if data[pos] == 0x21:
                 pos += 2
                 while pos < len(data) and data[pos] != 0:
                     pos += data[pos] + 1
@@ -86,34 +129,32 @@ def first_frame_lum(path):
         if pos >= len(data):
             return None
         lflags = data[pos + 9]
-        lct = bool(lflags & 0x80)
-        interlace = bool(lflags & 0x40)
         lct_size = 2 ** ((lflags & 0x07) + 1)
         pos += 10
-        local = []
-        if lct:
+        if lflags & 0x80:
+            local = []
             for i in range(lct_size):
                 o = pos + i * 3
                 local.append((data[o], data[o + 1], data[o + 2]))
+            palette = local
             pos += lct_size * 3
-        pal = local or palette
-        # 跳过 LZW 最小码长，收数据块
+        min_code = data[pos]
         pos += 1
         raw = bytearray()
         while pos < len(data) and data[pos] != 0:
             n = data[pos]
             raw += data[pos + 1:pos + 1 + n]
             pos += n + 1
-        if not raw or not pal:
+        idx = _lzw_decode(min_code, bytes(raw))
+        if not idx or not palette:
             return None
-        # 不完整解码 LZW，只用字节直方图近似：字节值分布与颜色索引高度相关
-        hist = [0] * len(pal)
-        for b in raw:
-            hist[b % len(pal)] += 1
-        tot = sum(hist) or 1
-        lum = sum(hist[i] * (0.299 * pal[i][0] + 0.587 * pal[i][1] + 0.114 * pal[i][2])
-                  for i in range(len(pal))) / tot
-        return round(lum, 1)
+        lum = 0.0
+        n = len(idx)
+        for b in idx:
+            if b < len(palette):
+                r, g, bl = palette[b]
+                lum += 0.299 * r + 0.587 * g + 0.114 * bl
+        return round(lum / n, 1)
     except Exception:
         return None
 

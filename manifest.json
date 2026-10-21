@@ -3,7 +3,7 @@
   "repo": "https://github.com/1791986214/wb-self-skills",
   "purpose": "自用 WorkBuddy 自制技能归档：中文名备注 + zip 打包，改动后自动同步",
   "source_dir": "/Users/lang/.workbuddy/skills",
-  "updated": "2026-10-21 17:17:23",
+  "updated": "2026-10-21 17:22:11",
   "count": 7,
   "categories": {
     "网页设计": 3,
@@ -12,7 +12,7 @@
     "项目管理": 1,
     "动效视频": 1
   },
-  "total_size_human": "8.1 MB",
+  "total_size_human": "8.2 MB",
   "skills": [
     {
       "no": "01",
@@ -64,10 +64,10 @@
       "summary": "Create validated architecture, workflow, sequence, data-flow, lifecycle/state, ERD, class, tree, timeline, and waterfall diagrams as explorable standalone HTML …",
       "triggers": "",
       "zip": "网页设计/04-archify(archify).zip",
-      "size_human": "4.3 MB",
-      "sha256": "7954355bf750c489463e267f455b2aebf5ac03d8ffd21ae0e8a56a898a794912",
-      "files": 203,
-      "src_updated": "2026-10-20",
+      "size_human": "4.5 MB",
+      "sha256": "a2e16d76641ea1b9e8b8e62e84e486fed0d31a0d04d3447f6b9ad591fba03905",
+      "files": 205,
+      "src_updated": "2026-10-21",
       "install": "解压后把 archify/ 整个放进 ~/.workbuddy/skills/"
     },
     {
