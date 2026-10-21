@@ -16,25 +16,23 @@
 | 02 | 架构可视化 | **项目架构归一化框架图** | `archinorm` | 项目框架·归一化框架图构建器。把项目架构写成归一化的分形模块树，并渲染成深色交互式架构图（节点链路图 + 依赖曲线 + 语义着色 + 下钻面板）。触发词：架构图、框架图、结构图、模块树、项目结构、画架构、代码地图、archinorm、归一化、迁移项目、给项目建结构。凡涉及代码的项目在设计或开发阶段应默认套用本框架。 | 507 KB | 2026-10-20 |
 | 03 | 项目管理 | **项目地图** | `project-map-skill` | 【v1.2.3】项目地图——把「项目计划 / 项目指令 / 项目资产 / 项目记忆」等口头术语映射到具体载体与工具；收工自动做「记忆双写 + 资产同步」 | 12 KB | 2026-10-21 |
 | 04 | 网页设计 | **archify** | `archify` | Create validated architecture, workflow, sequence, data-flow, lifecycle/state, ERD, class, tree, timeline, and waterfall diagrams as explorable standalone HTML … | 4.3 MB | 2026-10-20 |
-| 05 | 网页设计 | **界面设计总纲** | `emil-design-eng` | This skill encodes Emil Kowalski's philosophy on UI polish, component design, animation decisions, and the invisible details that make software feel great.
-
-【… | 16 KB | 2026-10-21 |
-| 06 | 网页设计 | **动效构建** | `animate` | Build an animation from scratch, making the decisions in the order that determines whether it feels right — should it animate at all, what purpose, which tool, … | 14 KB | 2026-10-21 |
-| 07 | 网页设计 | **动效评审** | `review-animations` | Reviews animation and motion code against a high craft bar derived from Emil Kowalski's design engineering philosophy. Default to flagging; approval is earned.\… | 14 KB | 2026-10-21 |
-| 08 | 网页设计 | **动效改造** | `improve-animations` | Survey a codebase's animation and motion code as a senior motion advisor, then produce a prioritized audit and self-contained implementation plans for other age… | 15 KB | 2026-10-21 |
-| 09 | 网页设计 | **动效机会发现** | `find-animation-opportunities` | Search a codebase or UI for places that don't animate but should, and reject everything that shouldn't. Read-only; it proposes motion with exact values, it does… | 11 KB | 2026-10-21 |
-| 10 | 网页设计 | **动效性能** | `animation-performance` | Keep web animations inside the frame budget — animate composite-only properties, keep motion off the main thread when the page is busy, and find the cause when … | 12 KB | 2026-10-21 |
-| 11 | 网页设计 | **动效词汇** | `animation-vocabulary` | Reverse-lookup glossary that turns a vague description of a web animation or motion effect into its exact term (\"the bouncy thing when a popover opens\" → Pop … | 11 KB | 2026-10-21 |
-| 12 | 网页设计 | **Apple 设计原则** | `apple-design` | Apple's approach to interface design and fluid, physical motion, translated for the web. Use when building or reviewing gesture-driven UI, spring animations, dr… | 16 KB | 2026-10-21 |
-| 13 | 网页设计 | **UI 库选型** | `pick-ui-library` | Pick the right library for a given frontend task from a curated, opinionated list — numbers, OTP inputs, charts, command menus, virtualization, drag and drop, t… | 8 KB | 2026-10-21 |
-| 14 | 网页设计 | **多版原型** | `prototype` | Build multiple genuinely different versions of a UI piece you describe, rendered behind a visual picker so you can flip through them live and promote the one th… | 13 KB | 2026-10-21 |
-| 15 | 网页设计 | **网页像原生** | `mobile-native` | Make a web app feel native on a phone — the small CSS and meta-tag fixes that separate \"a website in a browser\" from something that feels installed. Covers st… | 13 KB | 2026-10-21 |
-| 16 | 网页设计 | **UI 极端数据压测** | `break-ui` | Try to break a piece of UI by feeding it worst-case data — long names, unbreakable emails, one-letter names, missing fields, huge counts, zero items, long label… | 17 KB | 2026-10-21 |
-| 17 | 网页设计 | **Sonner 通知** | `ask-sonner` | Guide to Sonner, the React toast library — install and wire up the Toaster, pick the right toast() call, promise and loading toasts, updating, dismissing and pe… | 11 KB | 2026-10-21 |
-| 18 | 网页设计 | **三套 Web 设计体系** | `design-systems` | 三套原生 Web 设计体系（透镜 Lens / 点阵 Lattice / 序曲 Overture）的选型与取用手册。当用户要做有质感的网页、要「像某个设计系统那样的风格」、要玻璃拟态/点阵粒子/摄影歌剧院这类视觉语言，或问「用什么设计体系」「参考哪套组件库」「把这些组件搬进来」时加载。技能内不含上游 168MB 源码，… | 10 KB | 2026-10-21 |
-| 19 | 移动端 | **Expo 动效** | `animate-expo` | Build animations in React Native and Expo, making the decisions in the order that determines whether they feel right — should it animate, which thread it runs o… | 20 KB | 2026-10-21 |
-| 20 | 移动端 | **Swift 现代写法** | `write-swift` | How to write modern Swift well — modeling with value types, Swift 6 data-race safety and approachable concurrency (@concurrent, main-actor-by-default, actors, t… | 22 KB | 2026-10-21 |
-| 21 | 动效视频 | **一镜到底动效片** | `onetake` | Make short product / skill motion videos (10–30 s, narrated feature demos up to ~60 s) the way high-end launch clips are made — kinetic type, real UI as the mat… | 2.4 MB | 2026-10-21 |
+| 05 | 网页设计 | **界面设计总纲** | `emil-design-eng` | 动效与界面判断总纲：曲线、时长、阴影与边框、层级关系，源自 Emil 在 Vercel / Linear 的实战经验 | 16 KB | 2026-10-21 |
+| 06 | 网页设计 | **动效构建** | `animate` | 从零构建动效：先决定该不该动，再定属性、曲线、时长，以及如何被中断、如何退出 | 14 KB | 2026-10-21 |
+| 07 | 网页设计 | **动效评审** | `review-animations` | 按严格规则逐条评审既有动效，指出哪一条不合格、为什么、怎么改 | 14 KB | 2026-10-21 |
+| 08 | 网页设计 | **动效改造** | `improve-animations` | 扫全库动效，输出分优先级、可直接执行的改造计划 | 15 KB | 2026-10-21 |
+| 09 | 网页设计 | **动效机会发现** | `find-animation-opportunities` | 找出界面里真正值得加动效的位置，并明确指出哪里不该加 | 11 KB | 2026-10-21 |
+| 10 | 网页设计 | **动效性能** | `animation-performance` | 修掉帧的动效：合成层、布局抖动、transform/opacity 滥用等易漏细节 | 12 KB | 2026-10-21 |
+| 11 | 网页设计 | **动效词汇** | `animation-vocabulary` | 用准确术语描述想要的动效，把「就是那种感觉」翻译成可执行指令 | 11 KB | 2026-10-21 |
+| 12 | 网页设计 | **Apple 设计原则** | `apple-design` | Apple 的界面与流体动效原则，从 WWDC 设计演讲提炼并翻译成 Web 做法 | 16 KB | 2026-10-21 |
+| 13 | 网页设计 | **UI 库选型** | `pick-ui-library` | 按任务挑靠谱的 UI 库，避免手搓 toast、装到弃坑包 | 8 KB | 2026-10-21 |
+| 14 | 网页设计 | **多版原型** | `prototype` | 同一个 UI 一次做多个版本，带切换器逐个对比挑一个 | 13 KB | 2026-10-21 |
+| 15 | 网页设计 | **网页像原生** | `mobile-native` | 让网页在手机上像 App：hover 粘滞、点击高亮、100vh、输入框缩放、安全区 | 13 KB | 2026-10-21 |
+| 16 | 网页设计 | **UI 极端数据压测** | `break-ui` | 用最坏数据把界面撑坏：超长名字、异常邮箱、超大数字、空列表、超长标签 | 17 KB | 2026-10-21 |
+| 17 | 网页设计 | **Sonner 通知** | `ask-sonner` | Sonner toast 库的安装、样式定制、常用配方与常见问题修复 | 11 KB | 2026-10-21 |
+| 18 | 网页设计 | **三套 Web 设计体系** | `design-systems` | 透镜 Lens / 点阵 Lattice / 序曲 Overture 三套原生 Web 设计体系的选型、取用与落地手册 | 10 KB | 2026-10-21 |
+| 19 | 移动端 | **Expo 动效** | `animate-expo` | React Native / Expo 动效：手势、弹层、触感、转场，以及把动效移出 JS 线程 | 20 KB | 2026-10-21 |
+| 20 | 移动端 | **Swift 现代写法** | `write-swift` | 写现代 Swift：值类型、Swift 6 并发、泛型、性能与 Swift Testing | 22 KB | 2026-10-21 |
+| 21 | 动效视频 | **一镜到底动效片** | `onetake` | 10–30 秒产品动效片：界面用 HTML 重建、实测动作库、真实运动模糊、连贯度自动验收 | 2.4 MB | 2026-10-21 |
 
 > 共 **21** 个技能，合计 **7.4 MB**；最近技能更新 2026-10-21。改动记录见本仓库 commit 历史。
 <!-- SKILLS-TABLE:END -->
