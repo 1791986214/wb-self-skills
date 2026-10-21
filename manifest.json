@@ -3,7 +3,7 @@
   "repo": "https://github.com/1791986214/wb-self-skills",
   "purpose": "自用 WorkBuddy 自制技能归档：中文名备注 + zip 打包，改动后自动同步",
   "source_dir": "/Users/lang/.workbuddy/skills",
-  "updated": "2026-10-20 18:13:01",
+  "updated": "2026-10-21 09:20:41",
   "count": 4,
   "total_size_human": "4.8 MB",
   "skills": [
@@ -41,9 +41,9 @@
       "triggers": "",
       "zip": "03-项目地图(project-map-skill).zip",
       "size_human": "12 KB",
-      "sha256": "08b00661707e22a70be643d3f5a1888a904b046821652a17d3aa03aa1c0b96b9",
+      "sha256": "acfe4498f18665e111301962a5116725e79a19c97ad04296130455f3f595466b",
       "files": 2,
-      "src_updated": "2026-10-20",
+      "src_updated": "2026-10-21",
       "install": "解压后把 project-map-skill/ 整个放进 ~/.workbuddy/skills/"
     },
     {
