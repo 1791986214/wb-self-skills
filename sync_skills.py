@@ -199,9 +199,13 @@ def pack_one(entry, index):
         return {"ok": False, "dir": src_dir, "cn": cn, "error": "源目录不存在：%s" % src}
 
     no = "%02d" % index
-    zip_name = "%s-%s(%s).zip" % (no, cn, src_dir)
-    zip_path = os.path.join(ZIP_DIR, zip_name)
-    os.makedirs(ZIP_DIR, exist_ok=True)
+    # 按分类落到子目录：GitHub 上打开 skills/ 就能看出分组，而不是一堆平铺的 01~NN
+    category = (entry.get("category") or "未分类").strip() or "未分类"
+    safe_cat = re.sub(r'[\\/:*?"<>|]+', "-", category).strip(". ") or "未分类"
+    zip_name = "%s-%s(%s).zip" % (no, re.sub(r'[\\/:*?"<>|]+', "-", cn), src_dir)
+    zip_rel = "%s/%s" % (safe_cat, zip_name)          # 相对 skills/ 的路径
+    zip_path = os.path.join(ZIP_DIR, safe_cat, zip_name)
+    os.makedirs(os.path.dirname(zip_path), exist_ok=True)
 
     buf = _build_zip_bytes(src)
     sha = hashlib.sha256(buf).hexdigest()
